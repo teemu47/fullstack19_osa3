@@ -81,7 +81,6 @@ app.delete('/api/persons/:id', (req, res) => {
 })
 
 app.get('/info', (req, res) => {
-  Person.length
   res.end(`Phonebook has info for ${persons.length} people \n\n${new Date()}`)
 })
 
