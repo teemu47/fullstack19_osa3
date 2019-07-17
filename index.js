@@ -78,9 +78,13 @@ app.delete('/api/persons/:id', (req, res, next) => {
     .catch(error => next(error))
 })
 
-// app.get('/info', (req, res) => {
-//   res.end(`Phonebook has info for ${persons.length} people \n\n${new Date()}`)
-// })
+app.get('/info', (req, res, next) => {
+  Person.count()
+    .then(count => {
+      res.end(`Phonebook has info for ${count} people \n\n${new Date()}`)
+    })
+    .catch(error => next(error))
+})
 
 const errorHandler = (error, request, response, next) => {
   console.error(error)
