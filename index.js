@@ -63,18 +63,14 @@ app.post('/api/persons', (req, res) => {
       error: 'name or number missing'
     })
   }
-  if (persons.find(p => p.name === reqName)) {
-    return res.status(400).json({
-      error: 'name must be unique'
-    })
-  }
-  const person = {
+  const person = new Person({
     name: reqName,
-    number: reqNumber,
-    id: Math.floor(Math.random() * 999999999)
-  };
-  persons = persons.concat(person)
-  res.json(person)
+    number: reqNumber
+  })
+  person.save()
+    .then(response => {
+      res.json(response.toJSON())
+    })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
@@ -83,6 +79,7 @@ app.delete('/api/persons/:id', (req, res) => {
 })
 
 app.get('/info', (req, res) => {
+  Person.length
   res.end(`Phonebook has info for ${persons.length} people \n\n${new Date()}`)
 })
 
