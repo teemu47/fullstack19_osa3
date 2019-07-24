@@ -10,9 +10,9 @@ app.use(express.static('build'))
 app.use(cors())
 app.use(bodyParser.json())
 
-morgan.token('post-body', function (req, res) {
+morgan.token('post-body', function (req) {
   if (req.method === 'POST') {
-    return JSON.stringify(req.body);
+    return JSON.stringify(req.body)
   }
   return ' ' // returning empty string prints '-' character
 })
@@ -30,7 +30,7 @@ app.get('/api/persons/:id', (req, res, next) => {
   Person.findById(req.params.id)
     .then(person => {
       if (person) {
-        res.json(person.toJSON());
+        res.json(person.toJSON())
       } else {
         res.status(404).end()
       }
@@ -63,7 +63,7 @@ app.put('/api/persons/:id', (req, res, next) => {
     name: body.name,
     number: body.number
   }
-  Person.findByIdAndUpdate(req.params.id, person, {new: true})
+  Person.findByIdAndUpdate(req.params.id, person, { new: true })
     .then(result => {
       res.json(result.toJSON())
     })
@@ -88,18 +88,18 @@ app.get('/info', (req, res, next) => {
 
 const errorHandler = (error, request, response, next) => {
   console.error(error)
-  
+
   if (error.name === 'CastError' && error.kind === 'ObjectId') {
-    return response.status(400).send({error: 'malformatted id'})
+    return response.status(400).send({ error: 'malformatted id' })
   }
   else if (error.name === 'ValidationError') {
-    return response.status(400).json({error: error.message})
+    return response.status(400).json({ error: error.message })
   }
-  next(error);
+  next(error)
 }
 app.use(errorHandler)
 
 const PORT = process.env.PORT
-app.listen(PORT, () =>{
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
